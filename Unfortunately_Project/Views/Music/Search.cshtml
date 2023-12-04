@@ -1,0 +1,91 @@
+﻿@using DataAccess.Data.Entities;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<IdentityUser> UserManager;
+@model List<Track>;
+
+<div id="container" class="center gap-1 flex-column">
+    @{
+        foreach (var item in Model)
+        {
+            <div class="design gap-2">
+                <form asp-controller="Music" asp-action="AddToFavorite" asp-route-musicId="@item.Id" asp-route-username="@UserManager.GetUserName(User)">
+                    <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Img}"))"></button>
+                </form>
+                <div class="d-flex flex-column gap-1">
+                    <label>@item.Name</label>
+                    <label>@item.Artist.FirstName</label>
+                </div>
+                <button id="@item.Id-@item.Id" onclick="playMusic(@item.Id)" type="submit" class="start-audio"><span class="glyphicon glyphicon-play">&#11208;</span></button>
+                <audio style="width: 0px" id="@item.Id" controls src="@Url.Content($"/file/audio/{item.Audio}")"></audio>
+            </div>
+        }
+    }
+</div>
+
+@section scripts
+    {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+        function playMusic(id) {
+            var audio = document.getElementById(id);
+            if (audio.paused) {
+                audio.play();
+                $(`#${id}-${id}`).text("▐▐");
+                $(`#${id}-${id}`).css("font-size", "18px");
+                $(`#${id}-${id}`).css("padding", "10px");
+                $(`#${id}-${id}`).css("padding-right", "15px");
+            }
+            else {
+                audio.pause();
+                $(`#${id}-${id}`).text("");
+                $(`#${id}-${id}`).css("padding", "0px");
+                $(`#${id}-${id}`).css("padding-left", "10px");
+                $(`#${id}-${id}`).css("padding-right", "10px");
+                $(`#${id}-${id}`).append(`
+                                                    <span class="glyphicon glyphicon-play">&#11208;</span>
+                                        `);
+                $(`#${id}-${id}`).css("font-size", "32px");
+            }
+            audio.onended = function () {
+                $(`#${id}-${id}`).text("");
+                $(`#${id}-${id}`).css("padding", "0px");
+                $(`#${id}-${id}`).css("padding-left", "10px");
+                $(`#${id}-${id}`).css("padding-right", "10px");
+                $(`#${id}-${id}`).append(`
+                                                            <span class="glyphicon glyphicon-play">&#11208;</span>
+                                                `);
+                $(`#${id}-${id}`).css("font-size", "32px");
+            };
+        }
+
+        $(".favorite").hover(function () {
+            if ($(this).text() == "❤") {
+
+            }
+            else {
+                $(this).css("font-size", "32px");
+                $(this).text("♡");
+            }
+        },
+            function () {
+                if ($(this).text() == "❤") {
+                    $(this).css("font-size", "24px");
+                    $(this).text("❤");
+                }
+                else {
+                    $(this).text("");
+                }
+            });
+
+        $(".favorite").on("click", function () {
+            if ($(this).text() == "❤") {
+                $(this).css("font-size", "32px");
+                $(this).text("♡");
+            }
+            else {
+                $(this).css("font-size", "24px");
+                $(this).text("❤");
+            }
+        });
+    </script>
+}

@@ -1,0 +1,31 @@
+﻿@model Unfortunately_Project.Models.CreateMusicModel
+
+<div class="load center-load center d-flex g-1 text-center">
+    <form enctype="multipart/form-data" asp-controller="Music" asp-action="LoadMusic" method="post">
+        <div>
+            <label asp-for="Name" class="form-label">Name:</label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div>
+            <label asp-for="GenreId" class="form-label">Genre:</label>
+            <select asp-for="GenreId" asp-items="@ViewBag.Genres" class="form-select">
+                <option disabled selected>Choose genre...</option>
+            </select>
+        </div>
+        <div>
+            <label asp-for="ArtistId" class="form-label">Artist:</label>
+            <select asp-for="ArtistId" asp-items="@ViewBag.Artists" class="form-select">
+                <option disabled selected>Choose country...</option>
+            </select>
+        </div>
+        <div>
+            <label asp-for="Audio" class="form-label">Audio</label>
+            <input asp-for="Audio" class="form-control" type="file" accept="audio/*"/>
+        </div>
+        <div>
+            <label asp-for="Img" class="form-label">Img</label>
+            <input asp-for="Img" class="form-control" type="file" accept="image/*" />
+        </div>
+        <button type="submit" class="btn m-2">Load</button>
+    </form>
+</div>

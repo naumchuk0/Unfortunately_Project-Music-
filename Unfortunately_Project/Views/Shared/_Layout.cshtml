@@ -1,0 +1,63 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager;
+@inject UserManager<IdentityUser> UserManager;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Unfortunately_Project</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Unfortunately_Project.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="head fixed-top">
+        <nav id="first" class="navbar-expand-sm navbar-toggleable-sm box-shadow mb-3">
+            <a asp-controller="Home" asp-action="Index" class="text-dark text-decoration-none">
+                <img class="home" src="/icons/home.png"/>
+            </a>
+        </nav>
+        <nav id="main" class="navbar-expand-sm navbar-toggleable-sm box-shadow mb-3">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <a asp-controller="Music" asp-action="Favorites" class="text-dark btn text-decoration-none">Favorites</a>
+            }
+            @if(User.IsInRole("Admin"))
+            {
+                <a asp-controller="Music" asp-action="LoadMusic" class="text-dark btn text-decoration-none">Load Music</a>
+            }
+            <form asp-controller="Music" asp-action="Search" method="get">
+                <div class="d-flex gap-1">
+                    <input type="text" id="search" name="name" placeholder="Search..." class="p-1 input-group-text">
+                    <button type="submit" id="find" class="btn">Find</button>
+                </div>
+            </form>
+        </nav>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <nav id="log" class="navbar-expand-sm navbar-toggleable-sm box-shadow mb-3">
+                <partial name="_LoginPartial" />
+            </nav>
+        }
+        else
+        {
+            <nav class="navbar-expand-sm navbar-toggleable-sm box-shadow mb-3">
+                <partial name="_LoginPartial" />
+            </nav>
+        }
+    </header>
+
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+
+    <footer class="my-footer fixed-bottom"></footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

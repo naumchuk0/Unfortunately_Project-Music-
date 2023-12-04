@@ -1,0 +1,34 @@
+﻿@using DataAccess.Data.Entities;
+@model dynamic;
+
+<div id="container" class="center gap-1 flex-column">
+    @{
+        foreach (var item in Model.Favorites)
+        {
+            <div class="design gap-2">
+                <form asp-controller="Music" asp-action="DeleteFavorite" asp-route-id="@item.Id">
+                    <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Track.Img}"))"></button>
+                </form>
+                <div class="d-flex flex-column gap-1">
+                    <label>@item.Track.Name</label>
+                    <label>@item.Track.Artist.FirstName</label>
+                </div>
+                <audio controls src="@Url.Content($"/file/audio/{item.Track.Audio}")" />
+            </div>
+
+        }
+    }
+</div>
+
+@section scripts {
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+        $(".favorite").hover(function () {
+            $(this).css("font-size", "26px");
+            $(this).text("💔");
+        },
+        function () {
+            $(this).text("");
+        });
+    </script>
+}
