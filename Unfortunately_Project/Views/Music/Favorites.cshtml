@@ -6,7 +6,7 @@
         foreach (var item in Model.Favorites)
         {
             <div class="design gap-2">
-                <form asp-controller="Music" asp-action="DeleteFavorite" asp-route-id="@item.Id">
+                <form asp-controller="Music" asp-route-url="@Context.Request.Path" asp-action="DeleteFavorite" asp-route-id="@item.Id">
                     <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Track.Img}"))"></button>
                 </form>
                 <div class="d-flex flex-column gap-1">

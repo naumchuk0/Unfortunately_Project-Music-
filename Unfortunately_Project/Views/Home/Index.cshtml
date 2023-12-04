@@ -10,7 +10,7 @@
             foreach (var item in Model.Tracks)
             {
                 <div class="design gap-2">
-                    <form asp-controller="Music" asp-action="AddToFavorite" asp-route-musicId="@item.Id" asp-route-username="@UserManager.GetUserName(User)">
+                    <form asp-controller="Music" asp-action="AddToFavorite" asp-route-url="@Context.Request.Path" asp-route-musicId="@item.Id" asp-route-username="@UserManager.GetUserName(User)">
                         <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Img}"))"></button>
                     </form>
                     <div class="d-flex flex-column gap-1">

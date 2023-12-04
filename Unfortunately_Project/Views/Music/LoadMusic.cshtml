@@ -1,7 +1,7 @@
 ﻿@model Unfortunately_Project.Models.CreateMusicModel
 
 <div class="load center-load center d-flex g-1 text-center">
-    <form enctype="multipart/form-data" asp-controller="Music" asp-action="LoadMusic" method="post">
+    <form enctype="multipart/form-data" asp-controller="Music" asp-route-url="@Context.Request.Path" asp-action="LoadMusic" method="post">
         <div>
             <label asp-for="Name" class="form-label">Name:</label>
             <input asp-for="Name" class="form-control" />

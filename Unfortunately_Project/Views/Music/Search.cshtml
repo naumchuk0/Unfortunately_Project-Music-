@@ -1,22 +1,22 @@
 ﻿@using DataAccess.Data.Entities;
 @using Microsoft.AspNetCore.Identity;
 @inject UserManager<IdentityUser> UserManager;
-@model List<Track>;
+@model Dictionary<Track, string>;
 
 <div id="container" class="center gap-1 flex-column">
     @{
         foreach (var item in Model)
         {
             <div class="design gap-2">
-                <form asp-controller="Music" asp-action="AddToFavorite" asp-route-musicId="@item.Id" asp-route-username="@UserManager.GetUserName(User)">
-                    <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Img}"))"></button>
+                <form asp-controller="Music" asp-action="AddToFavorite" asp-route-url="@Context.Request.Path?name=@item.Value" asp-route-musicId="@item.Key.Id" asp-route-username="@UserManager.GetUserName(User)">
+                    <button type="submit" class="favorite" style="background-image: url(@Url.Content($"/file/img/{item.Key.Img}"))"></button>
                 </form>
                 <div class="d-flex flex-column gap-1">
-                    <label>@item.Name</label>
-                    <label>@item.Artist.FirstName</label>
+                    <label>@item.Key.Name</label>
+                    <label>@item.Key.Artist.FirstName</label>
                 </div>
-                <button id="@item.Id-@item.Id" onclick="playMusic(@item.Id)" type="submit" class="start-audio"><span class="glyphicon glyphicon-play">&#11208;</span></button>
-                <audio style="width: 0px" id="@item.Id" controls src="@Url.Content($"/file/audio/{item.Audio}")"></audio>
+                <button id="@item.Key.Id-@item.Key.Id" onclick="playMusic(@item.Key.Id)" type="submit" class="start-audio"><span class="glyphicon glyphicon-play">&#11208;</span></button>
+                <audio style="width: 0px" id="@item.Key.Id" controls src="@Url.Content($"/file/audio/{item.Key.Audio}")"></audio>
             </div>
         }
     }

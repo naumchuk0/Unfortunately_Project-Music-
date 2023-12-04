@@ -46,7 +46,7 @@ namespace Unfortunately_Project.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> LoadMusic(CreateMusicModel model)
+        public async Task<IActionResult> LoadMusic(CreateMusicModel model, string url)
         {
             if (!ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Unfortunately_Project.Controllers
             musicApp.Add(track);
             await musicApp.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Home");
+            return Redirect(url);
         }
         [HttpGet]
         public IActionResult Search(string name)
@@ -93,13 +93,14 @@ namespace Unfortunately_Project.Controllers
             var item = musicApp.Tracks;
             LoadArtists();
             LoadGenres();
-            List<Track> tracks = new List<Track>();
+            Dictionary<Track, string> tracks = new Dictionary<Track, string>();
+            //List<Track> tracks = new List<Track>();
 
             foreach (var i in item)
             {
                 if (i.Name.Contains(name))
                 {
-                    tracks.Add(i);
+                    tracks.Add(i, name);
                 }
             }
 
@@ -111,14 +112,11 @@ namespace Unfortunately_Project.Controllers
         }
         [Authorize]
         [HttpPost]
-        public IActionResult AddToFavorite(int musicId, string username)
+        public IActionResult AddToFavorite(int musicId, string username, string url)
         {
             if (!ModelState.IsValid)
             {
-                LoadArtists();
-                LoadGenres();
-
-                return RedirectToAction("Index", "Home");
+                return Redirect(url);
             }
 
             Favorite com = new Favorite()
@@ -131,17 +129,17 @@ namespace Unfortunately_Project.Controllers
             {
                 if (item.TrackId == musicId)
                 {
-                    return RedirectToAction("Index", "Home");
+                    return Redirect(url);
                 }
             }
 
             musicApp.Favorites.Add(com);
             musicApp.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return Redirect(url);
         }
         [HttpPost]
-        public IActionResult DeleteFavorite(int id)
+        public IActionResult DeleteFavorite(int id, string url)
         {
             var item = musicApp.Favorites.Find(id);
 
@@ -151,7 +149,7 @@ namespace Unfortunately_Project.Controllers
             }
             musicApp.Favorites.Remove(item);
             musicApp.SaveChanges();
-            return RedirectToAction("Favorites");
+            return Redirect(url);
         }
         [Authorize]
         [HttpGet]
